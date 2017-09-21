@@ -28,31 +28,29 @@ class Participant():
     def getBlacklist(self):
         return self.blacklist
 
-def valid_pick(pick, constraints):
+def valid_pick(pick):
     '''
     Arguments :
         - pick, a list of Participant objects
-        - constraints, a dictionary with participants' names (str) as indexes and tuples of participants (str) as values
     Returns :
-        - True if the pick is abiding to the constraints, False otherwise
+        - True if the pick is abiding to the constraints in each Participant's blacklist, False otherwise
     '''
     for idx, participant in enumerate(pick[:-1]):
-        if pick[idx+1].getName() in constraints[participant.getName()]:
+        if pick[idx+1].getName() in participant.getBlacklist():
             return False
-    return pick[-1].getName() not in constraints[pick[0].getName()] and pick[0].getName() not in constraints[pick[-1].getName()]
+    return pick[-1].getName() not in pick[0].getBlacklist() and pick[0].getName() not in pick[-1].getBlacklist()
 
-def matching_participants(participants, constraints):
+def matching_participants(participants):
     '''
     Arguments :
         - participants (list) of Participant objects
-        - constraints, a dictionary with participants' names (str) as indexes and tuples of participants (str) as values
     Returns :
-        - pick, same format as participants but shuffled and abiding to the constaints
+        - pick, same format as participants but shuffled and abiding to the constaints in each Participant's blacklist
     '''
     while True:
         pick = list(participants)
         random.shuffle(pick)
-        if valid_pick(pick, constraints):
+        if valid_pick(pick):
             return pick
 
 def create_pairs(valid_pick):
@@ -69,6 +67,8 @@ def create_pairs(valid_pick):
 
 if __name__ == '__main__':
     participants = [Participant(name) for name in datas.participants]
-    pick = matching_participants(participants, datas.constraints)
+    for participant in participants:
+        participant.blacklist.extend(datas.constraints[participant.getName()])
+    pick = matching_participants(participants)
     couples = create_pairs(pick)
     print(couples)
