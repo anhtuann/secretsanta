@@ -59,10 +59,15 @@ def create_pairs(valid_pick):
         - valid_pick, list of Participant objects forming a correct hamiltonian path
     Returns :
         - couples : list of tuples each containing the pair (gifter (Participant obj), giftee (Participant obj))
+        - also update each Participant object's gifter and giftee values
     '''
     gifters = list(valid_pick)
     giftees = list(valid_pick[1:] + valid_pick[:1])
     couples = list(zip(gifters, giftees))
+    for pair in couples:
+        gifter, giftee = pair
+        gifter.giftee = giftee
+        giftee.gifter = gifter
     return couples
 
 if __name__ == '__main__':
