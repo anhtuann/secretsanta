@@ -14,18 +14,6 @@ def valid_pick(pick, constraints):
             return False
     return pick[-1] not in constraints[pick[0]] and pick[0] not in constraints[pick[-1]]
 
-def create_pairs(valid_pick):
-    '''
-    Arguments :
-        - valid_pick, list of participants (str) forming a correct hamiltonian path
-    Returns :
-        - couples : list of tuples each containing the pair (gifter, giftee)
-    '''
-    gifters = list(valid_pick)
-    giftees = list(valid_pick[1:] + valid_pick[:1])
-    couples = list(zip(gifters, giftees))
-    return couples
-
 def matching_participants(participants, constraints):
     '''
     Arguments :
@@ -39,6 +27,18 @@ def matching_participants(participants, constraints):
         random.shuffle(pick)
         if valid_pick(pick, constraints):
             return pick
+
+def create_pairs(valid_pick):
+    '''
+    Arguments :
+        - valid_pick, list of participants (str) forming a correct hamiltonian path
+    Returns :
+        - couples : list of tuples each containing the pair (gifter, giftee)
+    '''
+    gifters = list(valid_pick)
+    giftees = list(valid_pick[1:] + valid_pick[:1])
+    couples = list(zip(gifters, giftees))
+    return couples
 
 if __name__ == '__main__':
     pick = matching_participants(datas.participants, datas.constraints)
