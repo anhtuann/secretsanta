@@ -28,6 +28,26 @@ class Participant():
     def getBlacklist(self):
         return self.blacklist
 
+def createParticipant(participants):
+    '''
+    Arguments :
+        - participants, a list of Participant objects
+    Returns :
+        - newParticipant, a Participant object
+    '''
+    while True:
+        participantName = input("Enter participant's name : ")
+        isNewParticipant = True
+        for participant in participants:
+            if participant.getName() == participantName:
+                isNewParticipant = False
+                print('This name has already been used')
+                break
+        if isNewParticipant:
+            break
+    newParticipant = Participant(participantName)
+    return newParticipant
+
 def valid_pick(pick):
     '''
     Arguments :
